@@ -30,6 +30,26 @@ jobs:
       with:
         node-version: 18
 
+    - name: Install Android SDK and Emulator
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y android-sdk adb
+        sdkmanager --install "system-images;android-30;default;x86_64"
+        sdkmanager --install "platforms;android-30"
+        sdkmanager --install "emulator"
+        sdkmanager --licenses
+
+    - name: Create and Start Emulator
+      run: |
+        echo "Creating AVD..."
+        echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-30;default;x86_64" --device "pixel_4"
+        echo "Starting Emulator..."
+        nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
+        sleep 60  # Give time for emulator to start
+
+    - name: Verify Emulator
+      run: adb devices
+
     - name: Install Appium and Dependencies
       run: |
         npm install -g appium
@@ -41,9 +61,6 @@ jobs:
       run: |
         nohup appium > appium.log 2>&1 &
         sleep 10  # Give Appium time to start
-
-    - name: List Connected Android Devices (for Debugging)
-      run: adb devices || true
 
     - name: Run Appium Tests
       env:
