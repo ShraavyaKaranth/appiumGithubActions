@@ -30,7 +30,7 @@ namespace AppiumSpecFlowProject1.Utilities
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "5a2ec9e3",
+                DeviceName = "emulator-5554", 
 
             };
             driverOptions.AddAdditionalAppiumOption("Application", appPath);
@@ -49,7 +49,7 @@ namespace AppiumSpecFlowProject1.Utilities
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "5a2ec9e3",
+                DeviceName = "emulator-5554", 
 
             };
             driverOptions.AddAdditionalAppiumOption("Application", appPath);
