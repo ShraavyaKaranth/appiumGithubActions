@@ -34,23 +34,24 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y unzip wget
-        mkdir -p $HOME/android-sdk
+        mkdir -p $HOME/android-sdk/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        echo "export ANDROID_HOME=$HOME/android-sdk" >> $HOME/.bashrc
-        echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$HOME/android-sdk/emulator:$PATH" >> $HOME/.bashrc
-        source $HOME/.bashrc
-        sdkmanager --version
-        sdkmanager --install "system-images;android-30;default;x86_64" "platforms;android-30" "platform-tools" "emulator"
-        sdkmanager --licenses
+        echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$HOME/android-sdk/emulator:$PATH" >> $GITHUB_ENV
+        source $GITHUB_ENV
+        ls -la $HOME/android-sdk/cmdline-tools/latest/bin
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-30;default;x86_64" "platforms;android-30" "platform-tools" "emulator"
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
     - name: Create and Start Emulator
       run: |
         echo "Creating AVD..."
-        echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-30;default;x86_64" --device "pixel_4"
+        echo "no" | $HOME/android-sdk/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;default;x86_64" --device "pixel_4"
         echo "Starting Emulator..."
-        nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
+        nohup $HOME/android-sdk/emulator/emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
         sleep 60  # Give time for emulator to start
 
     - name: Verify Emulator
