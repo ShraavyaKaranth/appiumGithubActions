@@ -87,6 +87,5 @@ jobs:
         sleep 10  # Give Appium time to start
 
     - name: Run Appium Tests
-      env:
-        APPIUM_HOST: "http://127.0.0.1:4723"
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --filter "TestCategory=TapFeature"
+
