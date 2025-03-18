@@ -41,6 +41,7 @@ jobs:
         
         # Set Android environment variables
         echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "export ANDROID_AVD_HOME=$HOME/.android/avd" >> $GITHUB_ENV
         echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$HOME/android-sdk/emulator:$PATH" >> $GITHUB_ENV
         source $GITHUB_ENV
 
@@ -60,14 +61,18 @@ jobs:
     - name: Create and Start Emulator
       run: |
         echo "Creating AVD..."
+        mkdir -p $HOME/.android/avd
         echo "no" | $HOME/android-sdk/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;default;x86_64" --device "pixel_4"
+        
+        echo "Verifying AVD..."
+        $HOME/android-sdk/emulator/emulator -list-avds
 
         echo "Starting Emulator..."
         nohup $HOME/android-sdk/emulator/emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
-        sleep 60  # Give time for emulator to start
+        sleep 90  # Give time for emulator to start
 
     - name: Verify Emulator
-      run: adb devices
+      run: $HOME/android-sdk/platform-tools/adb devices
 
     - name: Install Appium and Dependencies
       run: |
