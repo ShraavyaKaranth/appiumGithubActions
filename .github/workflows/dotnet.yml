@@ -1,0 +1,51 @@
+name: .NET Appium Tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install Appium and Dependencies
+      run: |
+        npm install -g appium
+        appium -v
+        npm install -g appium-doctor
+        appium-doctor
+
+    - name: Start Appium Server
+      run: |
+        nohup appium > appium.log 2>&1 &
+        sleep 10  # Give Appium time to start
+
+    - name: List Connected Android Devices (for Debugging)
+      run: adb devices || true
+
+    - name: Run Appium Tests
+      env:
+        APPIUM_HOST: "http://127.0.0.1:4723"
+      run: dotnet test --no-build --verbosity normal
