@@ -1,6 +1,5 @@
-﻿Feature: tap
-
-A short summary of the feature
+@TapFeature
+Feature: tap
 
 @Smoke
 Scenario: Verify tapping of an element
