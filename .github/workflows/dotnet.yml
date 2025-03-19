@@ -39,51 +39,33 @@ jobs:
         unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
 
-        # Set Android environment variables
-        echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "export ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
         echo "export ANDROID_AVD_HOME=$HOME/.android/avd" >> $GITHUB_ENV
         echo "export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH" >> $GITHUB_ENV
         source $GITHUB_ENV
 
         # Install missing emulator and SDK components
-        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "emulator" "platforms;android-30" "system-images;android-30;default;x86_64"
-
-        # Accept SDK licenses
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
-
-        # Verify installation
-        $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --list
-        ls -la $ANDROID_HOME/emulator/
+        sdkmanager --install "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
+        yes | sdkmanager --licenses
 
     - name: Create and Start Emulator
       run: |
-        echo "Creating AVD..."
         mkdir -p $ANDROID_AVD_HOME
-        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;default;x86_64" --device "pixel_4"
-        
-        echo "Verifying AVD..."
-        $ANDROID_HOME/emulator/emulator -list-avds
+        echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
 
-        echo "Starting Emulator..."
-        nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
-        sleep 90  # Give time for emulator to start
+        nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
+        sleep 90
 
     - name: Verify Emulator
-      run: |
-        $ANDROID_HOME/platform-tools/adb devices
-        $ANDROID_HOME/emulator/emulator -list-avds
+      run: adb devices
 
     - name: Install Appium and Dependencies
       run: |
         npm install -g appium
-        appium -v
         npm install -g @appium/doctor
-        appium-doctor
 
     - name: Start Appium Server
-      run: |
-        nohup appium > appium.log 2>&1 &
-        sleep 10  # Give Appium time to start
+      run: nohup appium > appium.log 2>&1 &
 
     - name: Run Appium Tests
       env:
