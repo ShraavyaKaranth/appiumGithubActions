@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,39 +21,39 @@ namespace AppiumSpecFlowProject1.Utilities
             this._appiumLocalService = appiumLocalService;
             _androidDriver = androidDriver;
         }
+
         public AndroidDriver InitializeAndroidNativeApp()
         {
-            //var appPath = apppath;
-            var appPath = "C:\\Users\\shkar\\Downloads\\ApiDemos-debug.apk";
-            //var appPath = "C:\\Users\\shkar\\Downloads\\android.wdio.native.app.v1.0.8.apk";
+            // Use a relative path to make it work in GitHub Actions
+            var appPath = Path.Combine(Directory.GetCurrentDirectory(), "ApiDemos-debug.apk");
+
             var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723");
             var driverOptions = new AppiumOptions()
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "emulator-5554", 
-
+                DeviceName = "emulator-5554"
             };
-            driverOptions.AddAdditionalAppiumOption("Application", appPath);
+
+            driverOptions.AddAdditionalAppiumOption("app", appPath); // Fixed incorrect "Application" option
             driverOptions.AddAdditionalAppiumOption("noReset", true);
 
-            AndroidDriver androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
-            return androidDriver;
+            return new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
         }
 
         public AndroidDriver InitializeAndroidWebApp()
         {
-            var appPath = "C:\\Users\\shkar\\Downloads\\ApiDemos-debug.apk";
-            //var appPath = "C:\\Users\\shkar\\Downloads\\android.wdio.native.app.v1.0.8.apk";
+            var appPath = Path.Combine(Directory.GetCurrentDirectory(), "ApiDemos-debug.apk");
+
             var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723");
             var driverOptions = new AppiumOptions()
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "emulator-5554", 
-
+                DeviceName = "emulator-5554"
             };
-            driverOptions.AddAdditionalAppiumOption("Application", appPath);
+
+            driverOptions.AddAdditionalAppiumOption("app", appPath); // Fixed incorrect "Application" option
             driverOptions.AddAdditionalAppiumOption("noReset", true);
 
             AndroidDriver androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
@@ -63,21 +64,21 @@ namespace AppiumSpecFlowProject1.Utilities
                 Console.WriteLine(context);
             }
             var driv = androidDriver.Contexts.First(x => x.Contains("WEBVIEW_io.appium.android.apis"));
-            //var driv = androidDriver.Contexts.First(x => x.Contains("WEBVIEW_com.wdiodemoapp"));
 
             androidDriver.Context = driv;
-
             return androidDriver;
         }
+
         public AppiumLocalService StartAppiumLocalService()
         {
             _appiumLocalService = new AppiumServiceBuilder().UsingAnyFreePort().Build();
-            if(!_appiumLocalService.IsRunning)
+            if (!_appiumLocalService.IsRunning)
             {
                 _appiumLocalService.Start();
             }
             return _appiumLocalService;
         }
+
         public AppiumLocalService StartAppiumLocalService(int portNumber)
         {
             _appiumLocalService = new AppiumServiceBuilder().UsingPort(portNumber).Build();
@@ -87,6 +88,7 @@ namespace AppiumSpecFlowProject1.Utilities
             }
             return _appiumLocalService;
         }
+
         public void CloseAppiumServer()
         {
             _appiumLocalService.Dispose();
