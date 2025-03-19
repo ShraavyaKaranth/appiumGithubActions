@@ -45,18 +45,15 @@ jobs:
         echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$HOME/android-sdk/emulator:$PATH" >> $GITHUB_ENV
         source $GITHUB_ENV
 
-        # Verify sdkmanager is accessible
-        ls -la $HOME/android-sdk/cmdline-tools/latest/bin
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
-
-        # Accept licenses
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-
-        # Install required packages
+        # Install missing emulator and other SDK components
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "emulator" "platforms;android-30" "system-images;android-30;default;x86_64"
 
-        # Verify installed system images
+        # Accept SDK licenses
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
+        # Verify installation
         $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --list
+        ls -la $HOME/android-sdk/emulator/
 
     - name: Create and Start Emulator
       run: |
@@ -72,13 +69,15 @@ jobs:
         sleep 90  # Give time for emulator to start
 
     - name: Verify Emulator
-      run: $HOME/android-sdk/platform-tools/adb devices
+      run: |
+        $HOME/android-sdk/platform-tools/adb devices
+        $HOME/android-sdk/emulator/emulator -list-avds
 
     - name: Install Appium and Dependencies
       run: |
         npm install -g appium
         appium -v
-        npm install -g appium-doctor
+        npm install -g @appium/doctor
         appium-doctor
 
     - name: Start Appium Server
@@ -87,5 +86,6 @@ jobs:
         sleep 10  # Give Appium time to start
 
     - name: Run Appium Tests
+      env:
+        APPIUM_HOST: "http://127.0.0.1:4723"
       run: dotnet test --no-build --verbosity normal --filter "TestCategory=TapFeature"
-
