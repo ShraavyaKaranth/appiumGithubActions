@@ -51,7 +51,7 @@ namespace AppiumSpecFlowProject1.Pages
             var origin = elements[13];
             var target = elements[1];
 
-            var touch = new PointerInputDevice(PointerKind.Touch, "finger");
+            var touch = new OpenQA.Selenium.Appium.Interactions.PointerInputDevice(PointerKind.Touch, "finger"); // ✅ Fixed Ambiguous Reference
             var actionBuilder = new ActionBuilder();
 
             actionBuilder.AddAction(touch.CreatePointerMove(origin, 0, 0, TimeSpan.FromMilliseconds(800)));
