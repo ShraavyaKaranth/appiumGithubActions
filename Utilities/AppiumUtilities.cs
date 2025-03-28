@@ -32,11 +32,10 @@ namespace AppiumSpecFlowProject1.Utilities
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "emulator-5554"
+                DeviceName = "emulator-5554",
+                Application = appPath, // Use the Application property instead of AddAdditionalAppiumOption
+                NoReset = true // Use the NoReset property instead of AddAdditionalAppiumOption
             };
-
-            driverOptions.AddAdditionalAppiumOption("app", appPath); // Fixed incorrect "Application" option
-            driverOptions.AddAdditionalAppiumOption("noReset", true);
 
             return new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
         }
@@ -50,11 +49,10 @@ namespace AppiumSpecFlowProject1.Utilities
             {
                 AutomationName = AutomationName.AndroidUIAutomator2,
                 PlatformName = "Android",
-                DeviceName = "emulator-5554"
+                DeviceName = "emulator-5554",
+                Application = appPath, // Use the Application property instead of AddAdditionalAppiumOption
+                NoReset = true // Use the NoReset property instead of AddAdditionalAppiumOption
             };
-
-            driverOptions.AddAdditionalAppiumOption("app", appPath); // Fixed incorrect "Application" option
-            driverOptions.AddAdditionalAppiumOption("noReset", true);
 
             AndroidDriver androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
 
