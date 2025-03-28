@@ -51,7 +51,7 @@ jobs:
     - name: Create and Start Emulator
       run: |
         mkdir -p $HOME/.android/avd
-        echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
+        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
 
         nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
         sleep 90
