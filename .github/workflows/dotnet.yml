@@ -66,6 +66,12 @@ jobs:
         echo "Emulator started. Listing devices..."
         $ANDROID_HOME/platform-tools/adb devices
 
+    - name: Restart ADB Server
+      run: |
+        $ANDROID_HOME/platform-tools/adb kill-server
+        $ANDROID_HOME/platform-tools/adb start-server
+        $ANDROID_HOME/platform-tools/adb devices
+
     - name: Verify Emulator
       run: $ANDROID_HOME/platform-tools/adb devices
 
