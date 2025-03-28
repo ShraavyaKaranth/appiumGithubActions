@@ -47,6 +47,7 @@ jobs:
         # Install missing emulator and SDK components
         sdkmanager --install "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
         yes | sdkmanager --licenses
+        yes | sdkmanager --licenses #run again to make sure all licenses are accepted.
 
     - name: Verify SDK Installation
       run: |
@@ -54,15 +55,16 @@ jobs:
         ls -al $ANDROID_HOME/cmdline-tools/latest/bin
         ls -al $ANDROID_HOME/platform-tools
         ls -al $ANDROID_HOME/emulator
+        ls -al $ANDROID_HOME/system-images/android-34/google_apis/x86_64
 
     - name: Create and Start Emulator
       run: |
         mkdir -p $HOME/.android/avd
-        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n custom_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
+        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n custom_emulator -k "system-images;android-34;google_apis;x86_64" --force
         echo "Listing available AVDs..."
         $ANDROID_HOME/emulator/emulator -list-avds
         nohup $ANDROID_HOME/emulator/emulator -avd custom_emulator -no-snapshot -no-audio -no-window -gpu off &
-        sleep 180
+        sleep 300
         echo "Emulator started. Listing devices..."
         $ANDROID_HOME/platform-tools/adb devices
 
