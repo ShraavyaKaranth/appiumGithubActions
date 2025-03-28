@@ -31,7 +31,7 @@ namespace AppiumSpecFlowProject1.Utilities
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = AutomationName.AndroidUIAutomator2; // Use the AutomationName property
             driverOptions.PlatformName = "Android"; // Use the PlatformName property
-            driverOptions.DeviceName = "custom_emulator"; // Use the DeviceName property
+            driverOptions.DeviceName = "emulator-5554"; // Use the DeviceName property (default emulator name)
             driverOptions.App = appPath; // Use the App property
             driverOptions.AddAdditionalAppiumOption("noReset", true); // Use AddAdditionalAppiumOption for noReset
 
@@ -46,7 +46,7 @@ namespace AppiumSpecFlowProject1.Utilities
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = AutomationName.AndroidUIAutomator2; // Use the AutomationName property
             driverOptions.PlatformName = "Android"; // Use the PlatformName property
-            driverOptions.DeviceName = "custom_emulator"; // Use the DeviceName property
+            driverOptions.DeviceName = "emulator-5554"; // Use the DeviceName property (default emulator name)
             driverOptions.App = appPath; // Use the App property
             driverOptions.AddAdditionalAppiumOption("noReset", true); // Use AddAdditionalAppiumOption for noReset
 
