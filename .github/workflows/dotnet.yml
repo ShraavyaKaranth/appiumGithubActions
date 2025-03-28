@@ -61,6 +61,8 @@ jobs:
         echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n custom_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
         echo "Listing available AVDs..."
         $ANDROID_HOME/emulator/emulator -list-avds
+        echo "Checking AVD directory..."
+        ls -al $HOME/.android/avd
         nohup $ANDROID_HOME/emulator/emulator -avd custom_emulator -no-snapshot -no-audio -no-window -gpu off &
         sleep 180
         echo "Emulator started. Listing devices..."
