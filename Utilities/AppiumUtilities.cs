@@ -28,14 +28,12 @@ namespace AppiumSpecFlowProject1.Utilities
             var appPath = Path.Combine(Directory.GetCurrentDirectory(), "ApiDemos-debug.apk");
 
             var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723");
-            var driverOptions = new AppiumOptions()
-            {
-                AutomationName = AutomationName.AndroidUIAutomator2,
-                PlatformName = "Android",
-                DeviceName = "emulator-5554",
-                Application = appPath, // Use the Application property instead of AddAdditionalAppiumOption
-                NoReset = true // Use the NoReset property instead of AddAdditionalAppiumOption
-            };
+            var driverOptions = new AppiumOptions();
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, AutomationName.AndroidUIAutomator2);
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "custom_emulator"); // Updated DeviceName
+            driverOptions.AddAdditionalCapability("app", appPath);
+            driverOptions.AddAdditionalCapability("noReset", true);
 
             return new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
         }
@@ -45,14 +43,12 @@ namespace AppiumSpecFlowProject1.Utilities
             var appPath = Path.Combine(Directory.GetCurrentDirectory(), "ApiDemos-debug.apk");
 
             var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723");
-            var driverOptions = new AppiumOptions()
-            {
-                AutomationName = AutomationName.AndroidUIAutomator2,
-                PlatformName = "Android",
-                DeviceName = "emulator-5554",
-                Application = appPath, // Use the Application property instead of AddAdditionalAppiumOption
-                NoReset = true // Use the NoReset property instead of AddAdditionalAppiumOption
-            };
+            var driverOptions = new AppiumOptions();
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, AutomationName.AndroidUIAutomator2);
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
+            driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "custom_emulator"); // Updated DeviceName
+            driverOptions.AddAdditionalCapability("app", appPath);
+            driverOptions.AddAdditionalCapability("noReset", true);
 
             AndroidDriver androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
 
