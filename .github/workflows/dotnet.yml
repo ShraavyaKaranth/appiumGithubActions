@@ -39,7 +39,7 @@ jobs:
         unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
 
-        echo "export ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+        echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "export ANDROID_AVD_HOME=$HOME/.android/avd" >> $GITHUB_ENV
         echo "export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH" >> $GITHUB_ENV
         source $GITHUB_ENV
@@ -50,7 +50,7 @@ jobs:
 
     - name: Create and Start Emulator
       run: |
-        mkdir -p $ANDROID_AVD_HOME
+        mkdir -p $HOME/.android/avd
         echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
 
         nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off &
