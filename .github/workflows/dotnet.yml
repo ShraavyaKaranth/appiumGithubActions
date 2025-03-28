@@ -59,9 +59,12 @@ jobs:
       run: |
         mkdir -p $HOME/.android/avd
         echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n custom_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
+        echo "Listing available AVDs..."
         $ANDROID_HOME/emulator/emulator -list-avds
         nohup $ANDROID_HOME/emulator/emulator -avd custom_emulator -no-snapshot -no-audio -no-window -gpu off &
-        sleep 90
+        sleep 180
+        echo "Emulator started. Listing devices..."
+        $ANDROID_HOME/platform-tools/adb devices
 
     - name: Verify Emulator
       run: $ANDROID_HOME/platform-tools/adb devices
