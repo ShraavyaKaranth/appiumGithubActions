@@ -33,7 +33,7 @@ namespace AppiumSpecFlowProject1.Utilities
             driverOptions.PlatformName = "Android"; // Use the PlatformName property
             driverOptions.DeviceName = "custom_emulator"; // Use the DeviceName property
             driverOptions.App = appPath; // Use the App property
-            driverOptions.NoReset = true; // Use the NoReset property
+            driverOptions.AddAdditionalAppiumOption("noReset", true); // Use AddAdditionalAppiumOption for noReset
 
             return new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
         }
@@ -48,7 +48,7 @@ namespace AppiumSpecFlowProject1.Utilities
             driverOptions.PlatformName = "Android"; // Use the PlatformName property
             driverOptions.DeviceName = "custom_emulator"; // Use the DeviceName property
             driverOptions.App = appPath; // Use the App property
-            driverOptions.NoReset = true; // Use the NoReset property
+            driverOptions.AddAdditionalAppiumOption("noReset", true); // Use AddAdditionalAppiumOption for noReset
 
             AndroidDriver androidDriver = new AndroidDriver(serverUri, driverOptions, TimeSpan.FromSeconds(180));
 
