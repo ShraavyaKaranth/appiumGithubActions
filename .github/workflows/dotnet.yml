@@ -38,9 +38,20 @@ jobs:
         arch: x86_64
         profile: pixel_4
         disable-linux-hw-accel: true
+        emulator-startup-timeout: 600000  # Increased timeout
+        disable-animations: true
+        disable-spellchecker: true
+        emulator-options: "-no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect"
         script: |
           adb shell input keyevent 82
           adb devices
+
+    - name: Debug ADB
+      run: |
+        adb kill-server
+        adb start-server
+        adb wait-for-device
+        adb devices
 
     - name: Install Appium and Dependencies
       run: |
