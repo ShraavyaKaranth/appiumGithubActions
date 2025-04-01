@@ -30,6 +30,9 @@ jobs:
       with:
         node-version: 18
 
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y libpulse0
+
     - name: Set up Android Emulator
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
@@ -38,7 +41,7 @@ jobs:
         arch: x86_64
         profile: pixel_4
         disable-linux-hw-accel: true
-        emulator-startup-timeout: 600000  # Increased timeout
+        emulator-boot-timeout: 600000
         disable-animations: true
         disable-spellchecker: true
         emulator-options: "-no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect"
